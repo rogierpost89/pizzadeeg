@@ -4,377 +4,288 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizza Deeg Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream:       #f7f3ec;
-    --cream-dark:  #ede7db;
-    --cream-mid:   #f0ebe1;
+    --cream:       #f5f0e8;
+    --cream-dark:  #e8e0d0;
+    --cream-mid:   #ede6d8;
     --green:       #4a7a5a;
     --green-light: #89b89a;
-    --green-pale:  #d6e8dc;
+    --green-pale:  #d0e4d8;
     --red:         #b03a30;
-    --white:       #fdfcfa;
+    --white:       #faf7f2;
+    --paper:       #f2ead8;
+    --paper-dark:  #e6dcc8;
     --stone:       #7a7168;
     --stone-dark:  #4e4840;
     --ink:         #1e1a15;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html {
-    background-color: #f7f3ec;
-  }
-
+  html { background-color: #f5f0e8; }
   body {
-    background-color: #f7f3ec;
+    background-color: #f5f0e8;
     color: var(--ink);
     font-family: 'Jost', sans-serif;
     font-weight: 300;
     min-height: 100vh;
   }
 
-  .container {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 3.5rem 1.75rem 5rem;
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    background: #1a1008;
   }
 
-  /* ── Header ── */
-  header {
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+    opacity: 0.82;
+    display: block;
+  }
+
+  /* Gradient overlay: donker onderaan voor leesbaarheid tekst */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10,6,2,0.15) 0%,
+      rgba(10,6,2,0.08) 35%,
+      rgba(10,6,2,0.55) 70%,
+      rgba(10,6,2,0.82) 100%
+    );
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 2.5rem 2rem 2.2rem;
     text-align: center;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.9s ease both;
   }
 
   .flag-bar {
     display: flex;
     justify-content: center;
     gap: 5px;
-    margin-bottom: 1.6rem;
+    margin-bottom: 1.2rem;
   }
-  .flag-stripe { width: 4px; height: 36px; border-radius: 2px; }
-  .flag-stripe.g { background: var(--green); opacity: 0.85; }
-  .flag-stripe.w { background: #c8c0b0; }
-  .flag-stripe.r { background: var(--red); opacity: 0.85; }
-
-  .pizza-mark { font-size: 2.6rem; display: block; margin-bottom: 0.9rem; }
+  .flag-stripe { width: 4px; height: 30px; border-radius: 2px; }
+  .flag-stripe.g { background: #7ab890; opacity: 0.9; }
+  .flag-stripe.w { background: rgba(255,255,255,0.55); }
+  .flag-stripe.r { background: #d46a60; opacity: 0.9; }
 
   h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.4rem, 7vw, 3.4rem);
-    font-weight: 400;
-    color: var(--ink);
-    line-height: 1.1;
+    font-size: clamp(2.6rem, 8vw, 3.8rem);
+    font-weight: 300;
+    color: #faf5ee;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
   }
-  h1 em { font-style: italic; color: var(--red); }
+  h1 em {
+    font-style: italic;
+    color: #f0c8a0;
+  }
 
   .subtitle {
-    margin-top: 0.6rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
+    margin-top: 0.55rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--stone);
+    color: rgba(250,245,238,0.65);
     font-weight: 400;
   }
 
-  .ornament {
-    margin: 1.4rem auto 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    color: var(--stone);
-    opacity: 0.5;
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-  }
-  .ornament::before, .ornament::after {
-    content: ''; width: 60px; height: 1px; background: currentColor;
+  /* ── Main content ── */
+  .container {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 2.5rem 1.75rem 5rem;
   }
 
   /* ── Tabs ── */
   .tab-bar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+    display: flex; gap: 0.5rem; margin-bottom: 2rem;
     background: var(--white);
     border: 1px solid var(--cream-dark);
-    border-radius: 14px;
-    padding: 0.35rem;
-    animation: fadeUp 0.9s 0.05s ease both;
+    border-radius: 14px; padding: 0.35rem;
+    animation: fadeUp 0.9s ease both;
+    box-shadow: 0 2px 12px rgba(46,42,37,0.07);
   }
-
   .tab-btn {
-    flex: 1;
-    padding: 0.75rem 0.5rem;
-    border: none;
-    border-radius: 10px;
-    background: transparent;
-    cursor: pointer;
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 0.8rem;
-    color: var(--stone);
-    transition: all 0.25s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
+    flex: 1; padding: 0.75rem 0.5rem; border: none; border-radius: 10px;
+    background: transparent; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-weight: 300; font-size: 0.8rem;
+    color: var(--stone); transition: all 0.25s ease;
+    display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
     -webkit-tap-highlight-color: transparent;
   }
   .tab-btn .tab-icon { font-size: 1.1rem; }
-  .tab-btn .tab-sub {
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    opacity: 0.7;
-  }
-  .tab-btn.active {
-    background: var(--cream-mid);
-    color: var(--ink);
-    border: 1px solid var(--cream-dark);
-    font-weight: 500;
-  }
+  .tab-btn .tab-sub { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+  .tab-btn.active { background: var(--cream-mid); color: var(--ink); border: 1px solid var(--cream-dark); font-weight: 500; }
   .tab-btn:hover:not(.active) { color: var(--ink); }
 
   /* ── Counter ── */
   .counter-card {
-    background: var(--white);
-    border: 1px solid var(--cream-dark);
-    border-radius: 18px;
-    padding: 2rem 2rem 1.75rem;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.9s 0.1s ease both;
-    box-shadow: 0 2px 18px rgba(46,42,37,0.06);
+    background: var(--paper);
+    border: 1px solid var(--paper-dark);
+    border-radius: 18px; padding: 2rem 2rem 1.75rem; margin-bottom: 2rem;
+    animation: fadeUp 0.9s 0.08s ease both;
+    box-shadow: 0 3px 20px rgba(46,42,37,0.09), inset 0 1px 0 rgba(255,255,255,0.6);
   }
-
   .counter-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--stone);
-    margin-bottom: 1.5rem;
-    text-align: center;
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--stone); margin-bottom: 1.5rem; text-align: center;
   }
-
-  .counter-control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-  }
-
+  .counter-control { display: flex; align-items: center; justify-content: center; gap: 2rem; }
   .counter-btn {
-    width: 50px; height: 50px;
-    border-radius: 50%;
-    border: 1.5px solid var(--cream-dark);
-    background: var(--cream-mid);
-    color: var(--stone-dark);
-    font-size: 1.4rem;
-    font-family: 'Cormorant Garamond', serif;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    width: 50px; height: 50px; border-radius: 50%;
+    border: 1.5px solid var(--paper-dark);
+    background: var(--cream); color: var(--stone-dark);
+    font-size: 1.4rem; font-family: 'Cormorant Garamond', serif;
+    cursor: pointer; transition: all 0.2s ease;
     display: flex; align-items: center; justify-content: center;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    line-height: 1;
+    user-select: none; -webkit-tap-highlight-color: transparent; line-height: 1;
+    box-shadow: 0 1px 4px rgba(46,42,37,0.1);
   }
-  .counter-btn:hover:not(:disabled) {
-    background: var(--green-pale);
-    border-color: var(--green-light);
-    color: var(--green);
-    transform: scale(1.07);
-  }
+  .counter-btn:hover:not(:disabled) { background: var(--green-pale); border-color: var(--green-light); color: var(--green); transform: scale(1.07); }
   .counter-btn:active:not(:disabled) { transform: scale(0.95); }
   .counter-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
   .counter-display { text-align: center; min-width: 80px; }
-
   .counter-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 4.5rem;
-    font-weight: 400;
-    color: var(--ink);
-    line-height: 1;
-    transition: color 0.2s ease, transform 0.2s ease;
-    display: block;
+    font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 400;
+    color: var(--ink); line-height: 1; transition: color 0.2s ease, transform 0.2s ease; display: block;
   }
   .counter-number.bump { color: var(--red); transform: scale(1.12); }
-
-  .counter-unit {
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--stone);
-    margin-top: 0.2rem;
-  }
+  .counter-unit { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); margin-top: 0.2rem; }
 
   .weight-row {
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--cream-dark);
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
+    margin-top: 1.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--paper-dark);
+    display: flex; justify-content: center; gap: 2.5rem;
   }
   .weight-item { text-align: center; }
-  .weight-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: var(--green);
+  .weight-value { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; color: var(--green); }
+  .weight-label { font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); margin-top: 0.15rem; }
+
+  .max-warning {
+    display: none; margin-top: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: #fdf0ee; border: 1px solid #e8b8b4;
+    border-radius: 8px; font-size: 0.73rem; color: var(--red);
+    text-align: center; line-height: 1.45;
   }
-  .weight-label {
-    font-size: 0.63rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--stone);
-    margin-top: 0.15rem;
-  }
+  .max-warning.visible { display: block; }
 
   /* ── Method banner ── */
   .method-banner {
-    background: var(--white);
-    border: 1px solid var(--cream-dark);
-    border-radius: 10px;
-    padding: 0.9rem 1.1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.77rem;
-    color: var(--stone-dark);
-    font-style: italic;
-    line-height: 1.6;
-    display: none;
+    background: var(--paper); border: 1px solid var(--paper-dark);
+    border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 1.5rem;
+    font-size: 0.77rem; color: var(--stone-dark); font-style: italic;
+    line-height: 1.6; display: none;
+    box-shadow: 0 2px 10px rgba(46,42,37,0.06);
   }
   .method-banner.visible { display: block; }
   .method-banner strong { color: var(--green); font-style: normal; font-weight: 500; }
 
-  /* ── Ingredients ── */
-  .section {
-    margin-bottom: 1.75rem;
-    animation: fadeUp 0.9s 0.2s ease both;
-  }
-
+  /* ── Section title ── */
+  .section { margin-bottom: 1.75rem; animation: fadeUp 0.9s 0.15s ease both; }
   .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.35rem;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--ink);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.35rem;
+    font-weight: 400; font-style: italic; color: var(--ink);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem;
   }
-  .section-title::after {
-    content: ''; flex: 1; height: 1px;
-    background: var(--cream-dark); margin-left: 0.3rem;
-  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--cream-dark); margin-left: 0.3rem; }
 
+  /* ── Ingredient rows ── */
   .ingredients-list { display: flex; flex-direction: column; gap: 0.4rem; }
-
   .ingredient-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     padding: 0.9rem 1.1rem;
-    background: var(--white);
-    border: 1px solid var(--cream-dark);
-    border-radius: 10px;
-    transition: border-color 0.2s;
+    background: var(--paper);
+    border: 1px solid var(--paper-dark);
+    border-radius: 10px; transition: border-color 0.2s;
+    box-shadow: 0 1px 6px rgba(46,42,37,0.05), inset 0 1px 0 rgba(255,255,255,0.5);
   }
   .ingredient-row:hover { border-color: var(--green-light); }
   .ingredient-row.hidden { display: none; }
-
   .ingredient-left { display: flex; flex-direction: column; gap: 0.2rem; }
   .ingredient-name { font-size: 0.85rem; color: var(--ink); font-weight: 400; }
   .ingredient-note { font-size: 0.67rem; color: var(--stone); font-style: italic; }
-
   .ingredient-amount {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.25rem;
-    font-weight: 400;
-    color: var(--ink);
-    transition: color 0.3s ease, transform 0.3s ease;
-    min-width: 70px;
-    text-align: right;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400;
+    color: var(--ink); transition: color 0.3s ease, transform 0.3s ease;
+    min-width: 70px; text-align: right;
   }
   .ingredient-amount.changed { color: var(--red); transform: scale(1.08); }
 
-  /* ── Steps ── */
-  .steps-section { animation: fadeUp 0.9s 0.3s ease both; }
-
+  /* ── Step cards ── */
+  .steps-section { animation: fadeUp 0.9s 0.2s ease both; }
   .step-card {
-    background: var(--white);
-    border: 1px solid var(--cream-dark);
-    border-radius: 12px;
-    padding: 1.4rem 1.5rem;
-    margin-bottom: 0.75rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 1px 8px rgba(46,42,37,0.03);
+    background: var(--paper);
+    border: 1px solid var(--paper-dark);
+    border-radius: 12px; padding: 1.4rem 1.5rem; margin-bottom: 0.75rem;
+    position: relative; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(46,42,37,0.07), inset 0 1px 0 rgba(255,255,255,0.55);
   }
   .step-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    border-radius: 3px 0 0 3px;
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; border-radius: 3px 0 0 3px;
   }
   .step-card.accent-green::before { background: var(--green); }
   .step-card.accent-stone::before { background: #b0a898; }
   .step-card.accent-red::before   { background: var(--red); }
+  .step-card.accent-gold::before  { background: #c8a84a; }
 
-  .step-head {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    margin-bottom: 0.9rem;
-  }
-  .step-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--ink);
-  }
+  .step-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.9rem; }
+  .step-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
   .step-tag {
-    margin-left: auto;
-    font-size: 0.63rem;
-    letter-spacing: 0.1em;
-    color: var(--stone);
-    border: 1px solid var(--cream-dark);
-    border-radius: 20px;
-    padding: 0.2rem 0.65rem;
-    background: var(--cream-mid);
-    white-space: nowrap;
+    margin-left: auto; font-size: 0.63rem; letter-spacing: 0.1em;
+    color: var(--stone); border: 1px solid var(--paper-dark);
+    border-radius: 20px; padding: 0.2rem 0.65rem;
+    background: var(--cream-mid); white-space: nowrap;
   }
 
   .step-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
   .step-list li {
-    font-size: 0.82rem;
-    color: var(--stone-dark);
-    padding-left: 1.1rem;
-    position: relative;
-    line-height: 1.55;
-    font-weight: 300;
+    font-size: 0.82rem; color: var(--stone-dark);
+    padding-left: 1.1rem; position: relative; line-height: 1.55; font-weight: 300;
   }
   .step-list li::before { content: '–'; position: absolute; left: 0; color: var(--stone); }
 
   .hl-green { color: var(--green); font-weight: 500; }
   .hl-red   { color: var(--red);   font-weight: 500; }
+  .hl-gold  { color: #a07828; font-weight: 500; }
 
   .step-note {
-    margin-top: 0.85rem;
-    font-size: 0.72rem;
-    color: var(--stone-dark);
-    font-style: italic;
-    padding: 0.55rem 0.85rem;
-    background: var(--cream-mid);
-    border-radius: 6px;
-    line-height: 1.5;
+    margin-top: 0.85rem; font-size: 0.72rem; color: var(--stone-dark);
+    font-style: italic; padding: 0.55rem 0.85rem;
+    background: rgba(0,0,0,0.03); border-radius: 6px; line-height: 1.5;
+    border: 1px solid var(--paper-dark);
   }
 
-  .footer-ornament { text-align: center; margin-top: 3rem; opacity: 0.35; }
+  .key-tip {
+    margin-top: 0.85rem; padding: 0.7rem 0.95rem;
+    background: #fdf6e3; border: 1px solid #e0cc90;
+    border-radius: 8px; font-size: 0.75rem; color: #7a6020; line-height: 1.55;
+  }
+  .key-tip strong {
+    display: block; font-size: 0.68rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #a07828; margin-bottom: 0.3rem; font-style: normal;
+  }
+
+  /* ── Footer ── */
+  .footer-ornament { text-align: center; margin-top: 3rem; opacity: 0.3; }
   .section-gap { margin: 2rem 0 1.75rem; }
 
   @keyframes fadeUp {
@@ -383,6 +294,7 @@
   }
 
   @media (max-width: 400px) {
+    .hero { height: 340px; }
     .counter-number { font-size: 3.6rem; }
     .counter-btn { width: 44px; height: 44px; }
     .weight-row { gap: 1.5rem; }
@@ -390,218 +302,274 @@
 </style>
 </head>
 <body>
-<div class="container">
 
-  <header>
-    <div class="flag-bar">
-      <div class="flag-stripe g"></div><div class="flag-stripe g"></div>
-      <div class="flag-stripe w"></div><div class="flag-stripe w"></div>
-      <div class="flag-stripe r"></div><div class="flag-stripe r"></div>
-    </div>
-    <span class="pizza-mark">🍕</span>
-    <h1>Impasto della<br><em>Pizza</em></h1>
-    <p class="subtitle">Twee methodes · KitchenAid</p>
-    <div class="ornament">✦</div>
-  </header>
-
-  <!-- Tabs -->
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="setMethod('snel')" id="tab-snel">
-      <span class="tab-icon">⚡</span>
-      <span class="tab-label">Snel deeg</span>
-      <span class="tab-sub">1 uur</span>
-    </button>
-    <button class="tab-btn" onclick="setMethod('lang')" id="tab-lang">
-      <span class="tab-icon">🌙</span>
-      <span class="tab-label">Langzaam deeg</span>
-      <span class="tab-sub">8 uur</span>
-    </button>
-  </div>
-
-  <!-- Counter -->
-  <div class="counter-card">
-    <div class="counter-label">Aantal pizzabollen</div>
-    <div class="counter-control">
-      <button class="counter-btn" id="btnMinus" onclick="changeCount(-1)">−</button>
-      <div class="counter-display">
-        <span class="counter-number" id="countDisplay">3</span>
-        <div class="counter-unit">bollen</div>
+  <!-- Hero -->
+  <div class="hero">
+    <img
+      class="hero-img"
+      src="pizza.png"
+      alt="Napolitaanse pizza uit de houtoven"
+      onerror="this.parentElement.style.background='linear-gradient(160deg,#2a1a0a 0%,#1a0e06 100%)'"
+    >
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="flag-bar">
+        <div class="flag-stripe g"></div><div class="flag-stripe g"></div>
+        <div class="flag-stripe w"></div><div class="flag-stripe w"></div>
+        <div class="flag-stripe r"></div><div class="flag-stripe r"></div>
       </div>
-      <button class="counter-btn" id="btnPlus" onclick="changeCount(1)">+</button>
-    </div>
-    <div class="weight-row">
-      <div class="weight-item">
-        <div class="weight-value">±270 g</div>
-        <div class="weight-label">per bol</div>
-      </div>
-      <div class="weight-item">
-        <div class="weight-value" id="totalWeight">810 g</div>
-        <div class="weight-label">totaal deeg</div>
-      </div>
+      <h1>Impasto della<br><em>Pizza</em></h1>
+      <p class="subtitle">Twee methodes · KitchenAid</p>
     </div>
   </div>
 
-  <!-- Method banner -->
-  <div class="method-banner" id="methodBanner">
-    <strong>Langzame fermentatie op kamertemperatuur (±20°C)</strong> — veel minder gist, geen olie nodig.
-    De lange rijs geeft het deeg meer smaak, betere structuur en een luchtigere korst. Begin 8–9 uur voor het bakken.
-  </div>
+  <div class="container">
 
-  <!-- Ingredients -->
-  <div class="section">
-    <div class="section-title">Ingrediënten</div>
-    <div class="ingredients-list">
-      <div class="ingredient-row">
-        <div class="ingredient-left">
-          <span class="ingredient-name">Pizzabloem</span>
-          <span class="ingredient-note">type 0 / W250</span>
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="setMethod('snel')" id="tab-snel">
+        <span class="tab-icon">⚡</span>
+        <span class="tab-label">Snel deeg</span>
+        <span class="tab-sub">1 uur</span>
+      </button>
+      <button class="tab-btn" onclick="setMethod('lang')" id="tab-lang">
+        <span class="tab-icon">🌙</span>
+        <span class="tab-label">Langzaam deeg</span>
+        <span class="tab-sub">8 uur</span>
+      </button>
+    </div>
+
+    <!-- Counter -->
+    <div class="counter-card">
+      <div class="counter-label">Aantal pizzabollen</div>
+      <div class="counter-control">
+        <button class="counter-btn" id="btnMinus" onclick="changeCount(-1)">−</button>
+        <div class="counter-display">
+          <span class="counter-number" id="countDisplay">3</span>
+          <div class="counter-unit">bollen</div>
         </div>
-        <div class="ingredient-amount" id="amtBloem">500 g</div>
+        <button class="counter-btn" id="btnPlus" onclick="changeCount(1)">+</button>
       </div>
-      <div class="ingredient-row">
-        <div class="ingredient-left">
-          <span class="ingredient-name">Warm water</span>
-          <span class="ingredient-note" id="noteWater">±38°C · 63% hydratatie</span>
+      <div class="weight-row">
+        <div class="weight-item">
+          <div class="weight-value">±270 g</div>
+          <div class="weight-label">per bol</div>
         </div>
-        <div class="ingredient-amount" id="amtWater">315 g</div>
-      </div>
-      <div class="ingredient-row">
-        <div class="ingredient-left">
-          <span class="ingredient-name">Zout</span>
+        <div class="weight-item">
+          <div class="weight-value" id="totalWeight">810 g</div>
+          <div class="weight-label">totaal deeg</div>
         </div>
-        <div class="ingredient-amount" id="amtZout">10 g</div>
       </div>
-      <div class="ingredient-row">
-        <div class="ingredient-left">
-          <span class="ingredient-name">Droge gist</span>
-          <span class="ingredient-note" id="amtGistNote">= 1 zakje</span>
+      <div class="max-warning" id="maxWarning">
+        ⚠️ Maximum van <strong>8 bollen</strong> per KitchenAid kom.<br>Maak het deeg in meerdere batches.
+      </div>
+    </div>
+
+    <!-- Method banner -->
+    <div class="method-banner" id="methodBanner">
+      <strong>Langzame fermentatie op kamertemperatuur (±20°C)</strong> — veel minder gist, geen olie nodig.
+      De lange rijs geeft het deeg meer smaak, betere structuur en een luchtigere korst. Begin 8–9 uur voor het bakken.
+    </div>
+
+    <!-- Ingredients -->
+    <div class="section">
+      <div class="section-title">Ingrediënten</div>
+      <div class="ingredients-list">
+        <div class="ingredient-row">
+          <div class="ingredient-left">
+            <span class="ingredient-name">Pizzabloem</span>
+            <span class="ingredient-note">type 0 / W250</span>
+          </div>
+          <div class="ingredient-amount" id="amtBloem">500 g</div>
         </div>
-        <div class="ingredient-amount" id="amtGist">7 g</div>
-      </div>
-      <div class="ingredient-row" id="rowOlie">
-        <div class="ingredient-left">
-          <span class="ingredient-name">Olijfolie</span>
-          <span class="ingredient-note">soepelheid bij korte fermentatie</span>
+        <div class="ingredient-row">
+          <div class="ingredient-left">
+            <span class="ingredient-name">Warm water</span>
+            <span class="ingredient-note" id="noteWater">±38°C · 63% hydratatie</span>
+          </div>
+          <div class="ingredient-amount" id="amtWater">315 g</div>
         </div>
-        <div class="ingredient-amount" id="amtOlie">10 g</div>
+        <div class="ingredient-row">
+          <div class="ingredient-left">
+            <span class="ingredient-name">Zout</span>
+          </div>
+          <div class="ingredient-amount" id="amtZout">10 g</div>
+        </div>
+        <div class="ingredient-row">
+          <div class="ingredient-left">
+            <span class="ingredient-name">Droge gist</span>
+            <span class="ingredient-note" id="amtGistNote">= 1 zakje</span>
+          </div>
+          <div class="ingredient-amount" id="amtGist">7 g</div>
+        </div>
+        <div class="ingredient-row" id="rowOlie">
+          <div class="ingredient-left">
+            <span class="ingredient-name">Olijfolie</span>
+            <span class="ingredient-note">soepelheid bij korte fermentatie</span>
+          </div>
+          <div class="ingredient-amount" id="amtOlie">10 g</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="section-gap"></div>
+    <div class="section-gap"></div>
 
-  <!-- Steps: SNEL -->
-  <div class="steps-section" id="stepsSnel">
-    <div class="section-title">Werkwijze</div>
-    <div class="step-card accent-green">
-      <div class="step-head">
-        <span class="step-name">Stap 1 — Mengen</span>
-        <span class="step-tag">± 5 minuten</span>
-      </div>
-      <ul class="step-list">
-        <li>Water + gist — <span class="hl-green">1 minuut</span> roeren</li>
-        <li>Bloem toevoegen</li>
-        <li><span class="hl-green">3–4 minuten</span> kneden op lage stand</li>
-        <li>Zout + olijfolie toevoegen</li>
-        <li>Nog <span class="hl-green">2 minuten</span> kneden</li>
-      </ul>
-      <div class="step-note">Stop zodra het deeg glad wordt en licht elastisch voelt. Niet perfect = prima.</div>
-    </div>
-    <div class="step-card accent-stone">
-      <div class="step-head">
-        <span class="step-name">Stap 2 — Snelle rijs</span>
-        <span class="step-tag">30 minuten</span>
-      </div>
-      <ul class="step-list">
-        <li>Maak een bal, leg in licht ingevette kom</li>
-        <li>Afdekken met een doek</li>
-        <li>Warme plek: <span class="hl-green">24–28°C</span></li>
-        <li>Bij de Big Green Egg, of oven met alleen lamp aan</li>
-        <li>Deeg moet <span class="hl-red">verdubbelen</span></li>
-      </ul>
-    </div>
-    <div class="step-card accent-red">
-      <div class="step-head">
-        <span class="step-name">Stap 3 — Bollen maken</span>
-        <span class="step-tag">10–15 min rust</span>
-      </div>
-      <ul class="step-list">
-        <li>Verdeel in <span class="hl-red" id="bollenTekstSnel">3 bollen van ±270 g</span></li>
-        <li>Laat <span class="hl-green">10–15 minuten</span> rusten voor het uitrollen</li>
-      </ul>
-    </div>
-  </div>
+    <!-- SNEL -->
+    <div class="steps-section" id="stepsSnel">
+      <div class="section-title">Werkwijze</div>
 
-  <!-- Steps: LANG -->
-  <div class="steps-section" id="stepsLang" style="display:none">
-    <div class="section-title">Werkwijze</div>
-    <div class="step-card accent-green">
-      <div class="step-head">
-        <span class="step-name">Stap 1 — Mengen</span>
-        <span class="step-tag">± 5 minuten</span>
+      <div class="step-card accent-green">
+        <div class="step-head">
+          <span class="step-name">Stap 1 — Mengen</span>
+          <span class="step-tag">± 5 minuten</span>
+        </div>
+        <ul class="step-list">
+          <li>Gebruik de <span class="hl-green">deeghaak</span> van de KitchenAid</li>
+          <li>Water + gist — <span class="hl-green">1 minuut</span> roeren</li>
+          <li>Bloem toevoegen</li>
+          <li><span class="hl-green">3–4 minuten</span> kneden op lage stand</li>
+          <li>Zout + olijfolie toevoegen</li>
+          <li>Nog <span class="hl-green">2 minuten</span> kneden</li>
+        </ul>
+        <div class="step-note">Stop zodra het deeg glad wordt en licht elastisch voelt. Niet perfect = prima.</div>
       </div>
-      <ul class="step-list">
-        <li>Water + gist — <span class="hl-green">1 minuut</span> roeren tot opgelost</li>
-        <li>Bloem + zout toevoegen</li>
-        <li><span class="hl-green">3–4 minuten</span> kneden op lage stand</li>
-        <li>Nog <span class="hl-green">2 minuten</span> kneden tot glad geheel</li>
-      </ul>
-      <div class="step-note">Geen olie nodig — de lange rijs zorgt vanzelf voor soepelheid en structuur.</div>
-    </div>
-    <div class="step-card accent-stone">
-      <div class="step-head">
-        <span class="step-name">Stap 2 — Lange rijs</span>
-        <span class="step-tag">6–8 uur</span>
-      </div>
-      <ul class="step-list">
-        <li>Maak een strakke bal en leg in licht ingevette kom</li>
-        <li>Afdekken met plasticfolie of deksel</li>
-        <li>Op kamertemperatuur laten staan: <span class="hl-green">±20°C</span></li>
-        <li>Deeg moet <span class="hl-red">minstens verdubbelen</span></li>
-        <li>Bij warmere keuken korter, bij koeler langer</li>
-      </ul>
-      <div class="step-note">Begin 8–9 uur voor het bakken. De trage rijs geeft meer smaak en een luchtigere korst.</div>
-    </div>
-    <div class="step-card accent-stone">
-      <div class="step-head">
-        <span class="step-name">Stap 3 — Bollen vormen</span>
-        <span class="step-tag">na de rijs</span>
-      </div>
-      <ul class="step-list">
-        <li>Verdeel voorzichtig in <span class="hl-red" id="bollenTekstLang">3 bollen van ±270 g</span></li>
-        <li>Niet te hard kneden — lucht bewaren</li>
-        <li>Dek af met een doek</li>
-      </ul>
-    </div>
-    <div class="step-card accent-red">
-      <div class="step-head">
-        <span class="step-name">Stap 4 — Narijzen</span>
-        <span class="step-tag">1–2 uur</span>
-      </div>
-      <ul class="step-list">
-        <li>Laat bollen op kamertemperatuur <span class="hl-green">1–2 uur</span> narijzen</li>
-        <li>Afgedekt met doek of ingevet bakpapier</li>
-        <li>Klaar als ze zacht en licht veerkrachtig aanvoelen</li>
-      </ul>
-      <div class="step-note">Goed nagerezen deeg strekt gemakkelijk uit zonder terug te veren.</div>
-    </div>
-  </div>
 
-  <div class="footer-ornament">
-    <div class="flag-bar">
-      <div class="flag-stripe g"></div><div class="flag-stripe g"></div>
-      <div class="flag-stripe w"></div><div class="flag-stripe w"></div>
-      <div class="flag-stripe r"></div><div class="flag-stripe r"></div>
-    </div>
-  </div>
+      <div class="step-card accent-stone">
+        <div class="step-head">
+          <span class="step-name">Stap 2 — Snelle rijs</span>
+          <span class="step-tag">30 minuten</span>
+        </div>
+        <ul class="step-list">
+          <li>Maak een bal, leg in licht ingevette kom</li>
+          <li>Afdekken met een <span class="hl-red">natte theedoek</span> — dit is essentieel</li>
+          <li>Warme plek: minimaal <span class="hl-green">21°C</span>, ideaal 24–28°C</li>
+          <li>Bij de Big Green Egg, of oven met alleen lamp aan</li>
+          <li>Deeg moet <span class="hl-red">verdubbelen</span></li>
+        </ul>
+      </div>
 
-</div>
+      <div class="step-card accent-red">
+        <div class="step-head">
+          <span class="step-name">Stap 3 — Bollen maken</span>
+          <span class="step-tag">1 uur voor het bakken</span>
+        </div>
+        <ul class="step-list">
+          <li>Verdeel in <span class="hl-red" id="bollenTekstSnel">3 bollen van ±270 g</span></li>
+          <li>Doe dit <span class="hl-red">idealiter 1 uur voor het bakken</span> — het deeg heeft rust nodig</li>
+          <li>Dek af met een natte theedoek en laat op kamertemperatuur rusten</li>
+        </ul>
+      </div>
+
+      <div class="step-card accent-gold">
+        <div class="step-head">
+          <span class="step-name">Stap 4 — Uitduwen</span>
+          <span class="step-tag">vlak voor het bakken</span>
+        </div>
+        <ul class="step-list">
+          <li>Bestrooi je werkblad royaal met <span class="hl-gold">semola bloem</span> (griesmeel van harde tarwe)</li>
+          <li>Duw de bol uit met je vingers vanuit het midden naar buiten</li>
+          <li>De semola voorkomt plakken en geeft een lichte, knapperige korst</li>
+        </ul>
+        <div class="key-tip">
+          <strong>✦ Key tip</strong>
+          Semola bloem (ook wel semolina of rimacinata) werkt véél beter dan gewone bloem bij het uitduwen. Het geeft grip, voorkomt scheuren en zorgt voor een authentieke knapperige bodem.
+        </div>
+      </div>
+    </div>
+
+    <!-- LANG -->
+    <div class="steps-section" id="stepsLang" style="display:none">
+      <div class="section-title">Werkwijze</div>
+
+      <div class="step-card accent-green">
+        <div class="step-head">
+          <span class="step-name">Stap 1 — Mengen</span>
+          <span class="step-tag">± 5 minuten</span>
+        </div>
+        <ul class="step-list">
+          <li>Gebruik de <span class="hl-green">deeghaak</span> van de KitchenAid</li>
+          <li>Water + gist — <span class="hl-green">1 minuut</span> roeren tot opgelost</li>
+          <li>Bloem + zout toevoegen</li>
+          <li><span class="hl-green">3–4 minuten</span> kneden op lage stand</li>
+          <li>Nog <span class="hl-green">2 minuten</span> kneden tot glad geheel</li>
+        </ul>
+        <div class="step-note">Geen olie nodig — de lange rijs zorgt vanzelf voor soepelheid en structuur.</div>
+      </div>
+
+      <div class="step-card accent-stone">
+        <div class="step-head">
+          <span class="step-name">Stap 2 — Lange rijs</span>
+          <span class="step-tag">6–8 uur</span>
+        </div>
+        <ul class="step-list">
+          <li>Maak een strakke bal en leg in licht ingevette kom</li>
+          <li>Afdekken met een <span class="hl-red">natte theedoek</span> — dit is essentieel</li>
+          <li>Op kamertemperatuur: minimaal <span class="hl-green">21°C</span>, ideaal ±24°C</li>
+          <li>Deeg moet <span class="hl-red">minstens verdubbelen</span></li>
+          <li>Bij warmere keuken korter, bij koeler langer</li>
+        </ul>
+        <div class="step-note">Begin 8–9 uur voor het bakken. De trage rijs geeft meer smaak en een luchtigere korst.</div>
+      </div>
+
+      <div class="step-card accent-stone">
+        <div class="step-head">
+          <span class="step-name">Stap 3 — Bollen vormen</span>
+          <span class="step-tag">1 uur voor het bakken</span>
+        </div>
+        <ul class="step-list">
+          <li>Verdeel voorzichtig in <span class="hl-red" id="bollenTekstLang">3 bollen van ±270 g</span></li>
+          <li>Doe dit <span class="hl-red">idealiter 1 uur voor het bakken</span> — het deeg heeft rust nodig</li>
+          <li>Niet te hard kneden — lucht bewaren</li>
+          <li>Dek af met een natte theedoek en laat op kamertemperatuur rusten</li>
+        </ul>
+      </div>
+
+      <div class="step-card accent-red">
+        <div class="step-head">
+          <span class="step-name">Stap 4 — Narijzen</span>
+          <span class="step-tag">onderdeel van het uur rust</span>
+        </div>
+        <ul class="step-list">
+          <li>Laat bollen op kamertemperatuur <span class="hl-green">1 uur</span> narijzen na het vormen</li>
+          <li>Afgedekt met natte theedoek</li>
+          <li>Klaar als ze zacht en licht veerkrachtig aanvoelen</li>
+        </ul>
+        <div class="step-note">Goed nagerezen deeg strekt gemakkelijk uit zonder terug te veren.</div>
+      </div>
+
+      <div class="step-card accent-gold">
+        <div class="step-head">
+          <span class="step-name">Stap 5 — Uitduwen</span>
+          <span class="step-tag">vlak voor het bakken</span>
+        </div>
+        <ul class="step-list">
+          <li>Bestrooi je werkblad royaal met <span class="hl-gold">semola bloem</span> (griesmeel van harde tarwe)</li>
+          <li>Duw de bol uit met je vingers vanuit het midden naar buiten</li>
+          <li>De semola voorkomt plakken en geeft een lichte, knapperige korst</li>
+        </ul>
+        <div class="key-tip">
+          <strong>✦ Key tip</strong>
+          Semola bloem (ook wel semolina of rimacinata) werkt véél beter dan gewone bloem bij het uitduwen. Het geeft grip, voorkomt scheuren en zorgt voor een authentieke knapperige bodem.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-ornament">
+      <div class="flag-bar">
+        <div class="flag-stripe g"></div><div class="flag-stripe g"></div>
+        <div class="flag-stripe w"></div><div class="flag-stripe w"></div>
+        <div class="flag-stripe r"></div><div class="flag-stripe r"></div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
 <script>
   const RECIPES = {
     snel: { bloem: 500, water: 315, zout: 10, gist: 7,   olie: 10 },
     lang: { bloem: 500, water: 315, zout: 10, gist: 1.5, olie: 0  }
   };
-  const BASE = 3;
+  const BASE = 3, MAX_BOLLEN = 8;
   let count = 3, method = 'snel';
 
   function fmt(val) {
@@ -614,8 +582,7 @@
     const z = val / 7;
     if (z < 0.4) return '(¼ zakje)';
     if (Math.abs(z - Math.round(z)) < 0.15) {
-      const n = Math.round(z);
-      return n === 1 ? '= 1 zakje' : `= ${n} zakjes`;
+      const n = Math.round(z); return n === 1 ? '= 1 zakje' : `= ${n} zakjes`;
     }
     return `≈ ${Math.round(z * 10) / 10} zakje`;
   }
@@ -641,6 +608,7 @@
     document.getElementById('bollenTekstLang').textContent = bt;
     document.getElementById('btnMinus').disabled = count <= 1;
     document.getElementById('btnPlus').disabled  = count >= 20;
+    document.getElementById('maxWarning').classList.toggle('visible', count > MAX_BOLLEN);
   }
   function setMethod(m) {
     method = m;
